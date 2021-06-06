@@ -9,11 +9,8 @@ call plug#begin('~/.config/nvim/autoload/plugged')
 	" Nord color scheme.
 	Plug 'arcticicestudio/nord-vim'
 
-	" Base16 color schemes.
-	Plug 'chriskempson/base16-vim'
-
-	" Syntax highlighting for .fish files.
-	Plug 'dag/vim-fish'
+	" Vim hybrid color theme
+	Plug 'kristijanhusak/vim-hybrid-material'
 
 	" Answer leetcode questions in VIM.
 	Plug 'ianding1/leetcode.vim'
@@ -46,4 +43,11 @@ call plug#begin('~/.config/nvim/autoload/plugged')
 
 	" Git integration 
 	Plug 'tpope/vim-fugitive'	
+
+	" vim-go
+	Plug 'fatih/vim-go'
+
+	" NERDTree
+	Plug 'scrooloose/nerdtree', {'on': 'NERDTreeToggle'}
+
 call plug#end()

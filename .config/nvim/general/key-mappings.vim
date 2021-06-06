@@ -1,6 +1,9 @@
 " This must be set first for  other mappings with <leader> to be set
 " correctly.
-let mapleader = ','
+let mapleader = ' '
+
+" Enter insert mode with quick jk
+inoremap jk <esc>
 
 " Easy quick fixing.
 nnoremap <leader>a :cclose<CR>
@@ -60,3 +63,8 @@ nnoremap <Right> <Nop>
 " Move by line
 nnoremap j gj
 nnoremap k gk
+
+" Disable search highlighting
+nnoremap <silent> <Esc><Esc> :nohlsearch<CR><Esc>
+
+

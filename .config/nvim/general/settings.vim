@@ -28,6 +28,8 @@ set ignorecase					" Case insensitive searching.
 set smartcase					" ...unless it starts with a capital.
 set hidden
 set cursorline
+set listchars=tab:\|\ ,space:.
+set list
 
 " Auto-wrap comments when we hit 80 lines.
 set textwidth=80
