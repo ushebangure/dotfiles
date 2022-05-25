@@ -48,6 +48,9 @@ return packer.startup(function(use)
   -- Colorschemes
   use "lunarvim/colorschemes" -- A bunch of colorschemes you can try out
   -- use "lunarvim/darkplus.nvim"
+  use 'shaeinst/roshnivim-cs'
+  use 'marko-cerovac/material.nvim'
+  use 'sainnhe/gruvbox-material'
 
   -- Completion
   use "hrsh7th/nvim-cmp" -- The completion plugin
@@ -58,13 +61,14 @@ return packer.startup(function(use)
   use "hrsh7th/cmp-nvim-lsp"
   use "hrsh7th/cmp-nvim-lua"
 
-  -- snippets
+  -- Snippets
   use "L3MON4D3/LuaSnip" --snippet engine
   use "rafamadriz/friendly-snippets" -- a bunch of snippets to use
 
   -- LSP
   use "neovim/nvim-lspconfig" -- enable LSP
   use "williamboman/nvim-lsp-installer" -- simple to use language server installer
+  use "jose-elias-alvarez/null-ls.nvim" -- for formatters and linters
 
   -- Telescope
   use "nvim-telescope/telescope.nvim"
@@ -77,6 +81,26 @@ return packer.startup(function(use)
   }
   use "p00f/nvim-ts-rainbow"
   use "nvim-treesitter/playground"
+
+  -- NVIM Tree
+  use {
+    'kyazdani42/nvim-tree.lua',
+    requires = {
+      'kyazdani42/nvim-web-devicons', -- optional, for file icon
+    },
+    tag = 'nightly' -- optional, updated every week. (see issue #1193)
+  }
+
+  -- Navigation
+  use "folke/which-key.nvim"
+
+  -- Bufferline, Lualine and indentline
+  use "akinsho/bufferline.nvim"
+  use "nvim-lualine/lualine.nvim"
+  use "lukas-reineke/indent-blankline.nvim"
+
+  -- Git
+  use "tveskag/nvim-blame-line"
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
