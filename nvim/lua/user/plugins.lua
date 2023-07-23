@@ -91,6 +91,9 @@ return packer.startup(function(use)
     tag = 'nightly' -- optional, updated every week. (see issue #1193)
   }
 
+  -- Autopairs
+  use "windwp/nvim-autopairs" -- Integrates with cmp and treesitter
+
   -- Navigation
   use "folke/which-key.nvim"
 
@@ -101,6 +104,19 @@ return packer.startup(function(use)
 
   -- Git
   use "tveskag/nvim-blame-line"
+
+  -- Comment
+  use "numToStr/Comment.nvim"
+
+  -- Golang
+  use "ray-x/go.nvim"
+  use 'ray-x/guihua.lua'
+
+  -- Terminal
+  use "akinsho/toggleterm.nvim"
+
+  -- Copilot
+  use "github/copilot.vim"
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins

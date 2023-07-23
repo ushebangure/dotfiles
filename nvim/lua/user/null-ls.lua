@@ -19,7 +19,7 @@ null_ls.setup({
     formatting.stylua,
 
     -- Diagnostics
-    diagnostics.flake8,
+    -- diagnostics.flake8,
 
     -- Code Actions
     code_actions.refactoring
