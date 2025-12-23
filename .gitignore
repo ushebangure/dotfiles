@@ -1,3 +1,14 @@
+# Homebrew
 Brewfile.lock.json
-.config/nvim/autoload/plugged/*
-.config/nvim/.netrwhist
+
+# macOS
+.DS_Store
+
+# Editor
+*.swp
+*.swo
+*~
+
+# Local/private configs
+.zshrc.local
+.gitconfig.local

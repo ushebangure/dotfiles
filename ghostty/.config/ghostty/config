@@ -1,0 +1,19 @@
+# Font
+font-family = Hack Nerd Font
+font-size = 14
+
+# Window
+window-padding-x = 10
+window-padding-y = 10
+macos-titlebar-style = hidden
+
+# Colors (Tokyo Night)
+background = 1a1b26
+foreground = c0caf5
+cursor-color = c0caf5
+
+# Behavior
+macos-option-as-alt = true
+copy-on-select = clipboard
+mouse-hide-while-typing = true
+shell-integration = zsh

@@ -1,35 +1,58 @@
-brew "awscli"
-brew "bat"
-brew "curl"
-brew "docker"
-brew "docker-machine"
-brew "docker-compose"
-brew "etcd"
-brew "ffmpeg"
-brew "fzf"
-brew "git"
-brew "go"
-brew "htop"
-brew "jq"
-brew "kubectl"
-brew "minikube"
-brew "mysql"
-brew "neovim"
-brew "node"
-brew "protobuf"
-brew "python"
-brew "stern"
-brew "tig"
-brew "tmux"
-brew "tree"
-brew "vim"
-brew "youtube-dl"
+# Brewfile - run with: brew bundle --file=Brewfile
+
+# Dotfile Management
+brew "stow"
+
+# Shell & Prompt
 brew "zsh"
-brew "zsh-autosuggestions"
-brew "zsh-syntax-highlighting"
-brew "the_silver_searcher"
+brew "starship"
 
+# Editors & Multiplexer
+brew "neovim"
+brew "tmux"
 
-cask "keycastr"
-cask "virtualbox"
+# Languages (system-wide, no version manager for now)
+brew "go"
+brew "node"
+brew "python@3.12"
 
+# Containers & K8s
+brew "colima"
+brew "docker"
+brew "docker-compose"
+brew "kubectl"
+brew "kubectx"
+brew "helm"
+brew "k9s"
+
+# Cloud
+brew "awscli"
+
+# Git
+brew "git"
+brew "gh"
+brew "lazygit"
+
+# Search & Productivity
+brew "fzf"
+brew "ripgrep"
+brew "fd"
+brew "bat"
+brew "eza"
+brew "zoxide"
+brew "jq"
+brew "yq"
+brew "tldr"
+brew "htop"
+brew "tree"
+
+# Docker TUI
+brew "lazydocker"
+
+# Fonts
+cask "font-hack-nerd-font"
+
+# Apps
+cask "1password-cli"
+cask "ghostty"
+cask "claude-code"

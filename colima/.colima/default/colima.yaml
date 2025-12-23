@@ -1,0 +1,9 @@
+cpu: 4
+memory: 8
+disk: 60
+runtime: docker
+kubernetes:
+  enabled: false
+  version: v1.28.3+k3s1
+docker:
+  host-gateway-ip: 192.168.106.1
