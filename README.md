@@ -1,6 +1,6 @@
 # Dotfiles
 
-macOS developer environment setup for a Principal Engineer / CTO workflow.
+This is my macOS developer environment setup, lightly opinionated so should work for most Engineers with little tweaking.
 
 ## What's Included
 
