@@ -12,3 +12,10 @@ Brewfile.lock.json
 # Local/private configs
 .zshrc.local
 .gitconfig.local
+
+# Colima
++# Colima runtime
+colima/.colima/_lima/
+colima/.colima/_store/
+colima/.colima/ssh_config
+
