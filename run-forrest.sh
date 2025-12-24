@@ -2,10 +2,10 @@
 set -euo pipefail
 
 # =============================================================================
-# macOS Developer Setup Script
+# run-forrest.sh - macOS Developer Setup Script
 # Author: Ushe
-# Description: Idempotent setup script for a new Mac
-# Usage: ./setup.sh [--ssh-1password | --ssh-file]
+# Description: Idempotent setup script for a new Mac (Run, Forrest, Run!)
+# Usage: ./run-forrest.sh [--ssh-1password | --ssh-file]
 # =============================================================================
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -16,17 +16,21 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+ITALIC='\033[3m'
 NC='\033[0m' # No Color
 
 log_info()    { echo -e "${BLUE}[INFO]${NC} $1"; }
 log_success() { echo -e "${GREEN}[OK]${NC} $1"; }
 log_warn()    { echo -e "${YELLOW}[WARN]${NC} $1"; }
 log_error()   { echo -e "${RED}[ERROR]${NC} $1"; }
+log_quote()   { echo -e "\n${CYAN}${ITALIC}\"$1\"${NC}\n"; }
 
 # =============================================================================
 # PREFLIGHT CHECKS
 # =============================================================================
 preflight() {
+    log_quote "Mama always said, life is like a box of chocolates. You never know what you're gonna get."
     log_info "Running preflight checks..."
 
     if [[ "$(uname)" != "Darwin" ]]; then
@@ -46,6 +50,7 @@ preflight() {
 # HOMEBREW PACKAGES
 # =============================================================================
 install_packages() {
+    log_quote "My mama always said, you've got to put the past behind you before you can move on."
     log_info "Installing Homebrew packages..."
 
     brew bundle --file="$DOTFILES_DIR/Brewfile"
@@ -57,6 +62,7 @@ install_packages() {
 # OH-MY-ZSH
 # =============================================================================
 setup_ohmyzsh() {
+    log_quote "Mama always had a way of explaining things so I could understand them."
     log_info "Setting up oh-my-zsh..."
 
     if [[ -d "$HOME/.oh-my-zsh" ]]; then
@@ -89,6 +95,7 @@ setup_ohmyzsh() {
 # SSH SETUP - FILE BASED
 # =============================================================================
 setup_ssh_file() {
+    log_quote "Me and Jenny goes together like peas and carrots."
     log_info "Setting up SSH (file-based)..."
 
     SSH_KEY="$HOME/.ssh/id_ed25519"
@@ -133,6 +140,7 @@ EOF
 # SSH SETUP - 1PASSWORD
 # =============================================================================
 setup_ssh_1password() {
+    log_quote "Me and Jenny goes together like peas and carrots."
     log_info "SSH via 1Password..."
     echo ""
     log_info "Configure SSH in 1Password:"
@@ -147,13 +155,22 @@ setup_ssh_1password() {
 # GIT CONFIG
 # =============================================================================
 setup_git() {
+    log_quote "My name is Forrest, Forrest Gump."
     log_info "Setting up Git..."
 
-    read -p "Enter Git user name: " git_name
-    read -p "Enter Git email: " git_email
+    # Check if git user is already configured
+    existing_name=$(git config --global user.name 2>/dev/null || true)
+    existing_email=$(git config --global user.email 2>/dev/null || true)
 
-    git config --global user.name "$git_name"
-    git config --global user.email "$git_email"
+    if [[ -n "$existing_name" && -n "$existing_email" ]]; then
+        log_warn "Git already configured (user: $existing_name <$existing_email>), skipping user setup"
+    else
+        read -p "Enter Git user name: " git_name
+        read -p "Enter Git email: " git_email
+
+        git config --global user.name "$git_name"
+        git config --global user.email "$git_email"
+    fi
 
     # Core settings
     git config --global init.defaultBranch main
@@ -163,19 +180,26 @@ setup_git() {
     git config --global diff.colorMoved zebra
 
     # SSH Signing
+    existing_signingkey=$(git config --global user.signingkey 2>/dev/null || true)
+
     if [[ "$SSH_MODE" == "--ssh-1password" ]]; then
         log_info "Configuring Git for 1Password SSH signing..."
         git config --global gpg.format ssh
         git config --global gpg.ssh.program "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
         git config --global commit.gpgsign true
-        echo ""
-        log_info "Paste your public key from 1Password (starts with ssh-ed25519):"
-        read -r signing_key
-        if [[ -n "$signing_key" ]]; then
-            git config --global user.signingkey "$signing_key"
-            log_success "Signing key configured"
+
+        if [[ -n "$existing_signingkey" ]]; then
+            log_warn "Signing key already configured, skipping"
         else
-            log_warn "No key entered - set it later with: git config --global user.signingkey \"ssh-ed25519 AAAA...\""
+            echo ""
+            log_info "Paste your public key from 1Password (starts with ssh-ed25519):"
+            read -r signing_key
+            if [[ -n "$signing_key" ]]; then
+                git config --global user.signingkey "$signing_key"
+                log_success "Signing key configured"
+            else
+                log_warn "No key entered - set it later with: git config --global user.signingkey \"ssh-ed25519 AAAA...\""
+            fi
         fi
     else
         log_info "Configuring Git for file-based SSH signing..."
@@ -200,6 +224,7 @@ setup_git() {
 # TMUX
 # =============================================================================
 setup_tmux() {
+    log_quote "I just felt like running."
     log_info "Setting up tmux..."
 
     # Install TPM (Tmux Plugin Manager)
@@ -217,24 +242,43 @@ setup_tmux() {
 # =============================================================================
 # STOW DOTFILES
 # =============================================================================
-stow_packages() {
-    log_info "Stowing dotfiles..."
+backup_if_exists() {
+    local target="$1"
+    local timestamp
+    timestamp=$(date +%s)
 
-    # Backup existing files that would conflict
-    for file in "$HOME/.zshrc" "$HOME/.tmux.conf"; do
-        if [[ -f "$file" && ! -L "$file" ]]; then
-            mv "$file" "$file.bak.$(date +%s)"
-            log_warn "Backed up existing $(basename "$file")"
-        fi
-    done
-
-    # Backup existing nvim config if not a symlink
-    if [[ -d "$HOME/.config/nvim" && ! -L "$HOME/.config/nvim" ]]; then
-        mv "$HOME/.config/nvim" "$HOME/.config/nvim.bak.$(date +%s)"
-        log_warn "Backed up existing nvim config"
+    # Remove broken symlinks
+    if [[ -L "$target" && ! -e "$target" ]]; then
+        rm "$target"
+        log_warn "Removed broken symlink: $target"
+        return
     fi
 
+    # Skip if it's already a valid symlink (managed by stow)
+    if [[ -L "$target" ]]; then
+        return
+    fi
+
+    # Backup existing file or directory
+    if [[ -e "$target" ]]; then
+        mv "$target" "$target.bak.$timestamp"
+        log_warn "Backed up existing $(basename "$target")"
+    fi
+}
+
+stow_packages() {
+    log_quote "I'm pretty tired... I think I'll go home now."
+    log_info "Stowing dotfiles..."
+
     mkdir -p "$HOME/.config"
+
+    # Backup all potential conflicts (files and directories)
+    backup_if_exists "$HOME/.zshrc"
+    backup_if_exists "$HOME/.tmux.conf"
+    backup_if_exists "$HOME/.colima"
+    backup_if_exists "$HOME/.config/nvim"
+    backup_if_exists "$HOME/.config/ghostty"
+    backup_if_exists "$HOME/.config/starship.toml"
 
     # Stow all packages
     cd "$DOTFILES_DIR"
@@ -247,6 +291,7 @@ stow_packages() {
 # FZF
 # =============================================================================
 setup_fzf() {
+    log_quote "I'm not a smart man, but I know what love is."
     log_info "Setting up fzf key bindings..."
 
     # Install fzf key bindings and completion
@@ -260,6 +305,7 @@ setup_fzf() {
 # MACOS DEFAULTS
 # =============================================================================
 setup_macos_defaults() {
+    log_quote "Mama said they was my magic shoes. They could take me anywhere."
     log_info "Setting macOS defaults..."
 
     # Keyboard: fast key repeat
@@ -304,10 +350,11 @@ setup_macos_defaults() {
 main() {
     echo ""
     echo "=============================================="
+    echo "  🏃 RUN, FORREST, RUN!"
     echo "  macOS Developer Setup"
     echo "  Mode: $SSH_MODE"
     echo "=============================================="
-    echo ""
+    log_quote "Now you wouldn't believe me if I told you, but I could run like the wind blows."
 
     preflight
     install_packages
@@ -330,6 +377,7 @@ main() {
         setup_macos_defaults
     fi
 
+    log_quote "That's all I have to say about that."
     echo ""
     log_success "Setup complete!"
     echo ""
@@ -339,6 +387,8 @@ main() {
     echo "  3. Run 'tmux' then press 'prefix + I' to install tmux plugins"
     echo "  4. Run 'colima start' to start Docker"
     echo "  5. Add SSH public key to GitHub"
+    echo ""
+    echo "  🍫 Life is like a box of chocolates..."
     echo ""
 }
 
