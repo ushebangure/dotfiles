@@ -15,6 +15,12 @@ brew "tmux"
 brew "go"
 brew "node"
 brew "python@3.12"
+brew "goose"
+brew "libpq"
+
+# Syntax styling and linters
+brew "golangci-lint"
+brew "pre-commit"
 
 # Containers & K8s
 brew "colima"
@@ -27,6 +33,7 @@ brew "k9s"
 
 # Cloud
 brew "awscli"
+brew "aws-sam-cli"
 
 # Git
 brew "git"

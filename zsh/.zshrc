@@ -137,3 +137,4 @@ gcob() {
 killport() {
     lsof -ti:$1 | xargs kill -9
 }
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
